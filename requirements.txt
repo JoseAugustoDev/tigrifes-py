@@ -1,0 +1,4 @@
+# Dependências dos experimentos disponíveis.
+pandas
+matplotlib
+openpyxl
