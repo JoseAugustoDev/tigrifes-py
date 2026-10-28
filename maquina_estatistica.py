@@ -126,12 +126,12 @@ def executar_experimento(numero):
 def menu(saldo_inicial=100, semente=None, saida=Path("resultados")):
     while True:
         print("\nMÁQUINA ESTATÍSTICA")
-        print("1. Jogar individualmente")
-        print("2. Experimento 1 — Frequências e probabilidades")
-        print("3. Experimento 2 — Tamanho da amostra e média acumulada")
-        print("4. Experimento 3 — Saldo limitado")
-        print("5. Experimento 4 — Probabilidade condicional")
-        print("6. Experimento 5 — Comparação de pagamentos")
+        print("1. Experimento 1 — Frequências e probabilidades")
+        print("2. Experimento 2 — Tamanho da amostra e média acumulada")
+        print("3. Experimento 3 — Saldo limitado")
+        print("4. Experimento 4 — Probabilidade condicional")
+        print("5. Experimento 5 — Comparação de pagamentos")
+        print("6. Jogar individualmente")
         print("0. Sair")
         try:
             opcao = input("Escolha uma opção: ").strip()
@@ -142,10 +142,10 @@ def menu(saldo_inicial=100, semente=None, saida=Path("resultados")):
         try:
             if opcao == "0":
                 break
-            if opcao == "1":
+            elif opcao == "6":
                 jogar(saldo_inicial, semente, saida)
-            elif opcao in ("2", "3", "4", "5", "6"):
-                executar_experimento({"2": 1, "3": 2, "4": 3, "5": 4, "6": 5}[opcao])
+            elif opcao in ("1", "2", "3", "4", "5"):
+                executar_experimento({"1": 1, "2": 2, "3": 3, "4": 4, "5": 5}[opcao])
             else:
                 print("Opção inválida. Escolha 1, 2, 3, 4, 5, 6 ou 0.")
         except subprocess.CalledProcessError:
