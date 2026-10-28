@@ -1,4 +1,4 @@
-"""Menu da Máquina Estatística: jogo individual e experimentos 4 e 5.
+"""Menu da Máquina Estatística: jogo individual e experimentos 1 a 5.
 
 Uso: python maquina_estatistica.py [--saldo 100] [--semente 2026]
 """
@@ -116,7 +116,7 @@ def jogar(saldo_inicial=100, semente=None, saida=Path("resultados")):
 
 def executar_experimento(numero):
     pasta = Path(__file__).resolve().parent
-    arquivo = pasta / f"experimento-{numero}.py"
+    arquivo = pasta / "experimentos" / f"experimento-{numero}.py"
     if not arquivo.is_file():
         raise FileNotFoundError(f"Arquivo não encontrado: {arquivo.name}")
     print(f"\nExecutando experimento {numero}...", flush=True)
@@ -127,8 +127,11 @@ def menu(saldo_inicial=100, semente=None, saida=Path("resultados")):
     while True:
         print("\nMÁQUINA ESTATÍSTICA")
         print("1. Jogar individualmente")
-        print("2. Experimento 4 — Probabilidade condicional")
-        print("3. Experimento 5 — Comparação de pagamentos")
+        print("2. Experimento 1 — Frequências e probabilidades")
+        print("3. Experimento 2 — Tamanho da amostra e média acumulada")
+        print("4. Experimento 3 — Saldo limitado")
+        print("5. Experimento 4 — Probabilidade condicional")
+        print("6. Experimento 5 — Comparação de pagamentos")
         print("0. Sair")
         try:
             opcao = input("Escolha uma opção: ").strip()
@@ -141,10 +144,10 @@ def menu(saldo_inicial=100, semente=None, saida=Path("resultados")):
                 break
             if opcao == "1":
                 jogar(saldo_inicial, semente, saida)
-            elif opcao in ("2", "3"):
-                executar_experimento(4 if opcao == "2" else 5)
+            elif opcao in ("2", "3", "4", "5", "6"):
+                executar_experimento({"2": 1, "3": 2, "4": 3, "5": 4, "6": 5}[opcao])
             else:
-                print("Opção inválida. Escolha 1, 2, 3 ou 0.")
+                print("Opção inválida. Escolha 1, 2, 3, 4, 5, 6 ou 0.")
         except subprocess.CalledProcessError:
             print("O experimento não foi concluído. Confira a mensagem de erro acima.")
         except (OSError, ValueError) as erro:

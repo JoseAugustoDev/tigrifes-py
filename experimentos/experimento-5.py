@@ -5,10 +5,10 @@ import matplotlib.pyplot as plt
 from matplotlib.ticker import PercentFormatter
 
 APOSTA = 1
-PASTA_PROJETO = Path(__file__).resolve().parent
+PASTA_PROJETO = Path(__file__).resolve().parent.parent
 PASTA_RESULTADOS = PASTA_PROJETO / "resultados"
 PASTA_GRAFICOS = PASTA_PROJETO / "graficos"
-ARQUIVO = PASTA_PROJETO / "rodadas.xlsx"
+ARQUIVO = PASTA_PROJETO / "planilhas" / "rodadas.xlsx"
 
 # 1. Carregar as mesmas 10.000 rodadas
 df = pd.read_excel(ARQUIVO)

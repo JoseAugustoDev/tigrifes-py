@@ -4,11 +4,11 @@ import pandas as pd
 import matplotlib.pyplot as plt
 from matplotlib.ticker import PercentFormatter
 
-PASTA_PROJETO = Path(__file__).resolve().parent
+PASTA_PROJETO = Path(__file__).resolve().parent.parent
 PASTA_RESULTADOS = PASTA_PROJETO / "resultados"
 PASTA_GRAFICOS = PASTA_PROJETO / "graficos"
 
-df = pd.read_excel(PASTA_PROJETO / "rodadas.xlsx")
+df = pd.read_excel(PASTA_PROJETO / "planilhas" / "rodadas.xlsx")
 # Aceitar Rolo1, Rolo2, Rolo3 e Venceu, ignorando espaços e maiúsculas/minúsculas.
 df.columns = df.columns.str.strip().str.capitalize()
 
