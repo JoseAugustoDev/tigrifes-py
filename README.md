@@ -90,12 +90,12 @@ Escolha uma das opções:
 
 | Opção | Ação |
 | --- | --- |
-| `1` | Jogar individualmente. |
-| `2` | Executar `experimentos/experimento-1.py`. |
-| `3` | Executar `experimentos/experimento-2.py`. |
-| `4` | Executar `experimentos/experimento-3.py`. |
-| `5` | Executar `experimentos/experimento-4.py`. |
-| `6` | Executar `experimentos/experimento-5.py`. |
+| `1` | Executar `experimentos/experimento-1.py`. |
+| `2` | Executar `experimentos/experimento-2.py`. |
+| `3` | Executar `experimentos/experimento-3.py`. |
+| `4` | Executar `experimentos/experimento-4.py`. |
+| `5` | Executar `experimentos/experimento-5.py`. |
+| `6` | Jogar individualmente. |
 | `0` | Encerrar o programa. |
 
 Os experimentos usam o mesmo Python do menu e leem as planilhas de `planilhas/`. As tabelas são salvas em `resultados/` e as imagens em `graficos/`, dentro da pasta do projeto. Essas pastas são criadas automaticamente. Feche a janela do gráfico para retornar ao menu e escolher outra opção. As configurações de execução sem janela descritas abaixo também se aplicam ao menu.
@@ -104,7 +104,7 @@ Os experimentos usam o mesmo Python do menu e leem as planilhas de `planilhas/`.
 
 O menu e o jogo usam somente a biblioteca padrão do Python. Para jogar, também é possível abrir o menu com `py -3 maquina_estatistica.py` no Windows ou `python3 maquina_estatistica.py` no Linux/macOS, sem instalar as dependências dos experimentos.
 
-Após escolher `1`, pressione **ENTER** para jogar uma rodada ou digite **S** para voltar ao menu. Cada rodada custa 1 crédito e apenas três símbolos iguais na linha central concedem prêmio. O saldo inicial é de 100 créditos; a sessão termina quando você sai ou fica sem saldo.
+Após escolher `6`, pressione **ENTER** para jogar uma rodada ou digite **S** para voltar ao menu. Cada rodada custa 1 crédito e apenas três símbolos iguais na linha central concedem prêmio. O saldo inicial é de 100 créditos; a sessão termina quando você sai ou fica sem saldo.
 
 As opções `--saldo`, `--semente` e `--saida` se aplicam ao jogo individual: ajustam o saldo inicial, permitem repetir uma sequência de sorteios e escolhem a pasta do histórico. Exemplo no Windows:
 
@@ -116,9 +116,9 @@ Se houver alguma rodada, o histórico será salvo em `resultados/jogador/sessao_
 
 ## Experimento 1
 
-O script lê as 10.000 rodadas de `planilhas/rodadas.xlsx`, geradas anteriormente pela macro com semente 2026 e sem regra de parada. Os rolos devem conter valores de 0 a 4. A aposta é de 1 crédito; três rolos iguais pagam 5, 10, 15, 25 ou 50 créditos conforme o valor sorteado. Assim, os lucros possíveis são −1, 4, 9, 14, 24 e 49 créditos.
+O script lê as 10.000 rodadas de `planilhas/rodadas.xlsx`, geradas anteriormente pela macro com semente 2026 e sem regra de parada. Os rolos contêm as **paradas sorteadas**, de 0 a 4. O símbolo premiado na linha central é `(parada + 1) % 5`: 0 → 1, 1 → 2, 2 → 3, 3 → 4 e 4 → 0. Assim, três paradas iguais pagam, respectivamente, 10, 15, 25, 50 ou 5 créditos. A chance de prêmio continua 4%, mas os lucros observados mudam. A aposta é de 1 crédito e os lucros possíveis são −1, 4, 9, 14, 24 e 49 créditos.
 
-Execute pela opção **2** do menu ou diretamente:
+Execute pela opção **1** do menu ou diretamente:
 
 ```powershell
 .\.venv\Scripts\python.exe experimentos/experimento-1.py
@@ -141,11 +141,11 @@ Coloque as três planilhas `exp-2-seed-10.xlsx`, `exp-2-seed-2026.xlsx` e `exp-2
 | Roleta 1 | Roleta 2 | Roleta 3 | Lucro | Lucro médio |
 | --- | --- | --- | --- | --- |
 
-As roletas contêm inteiros de 0 a 4. A coluna `Lucro` contém o **lucro acumulado**, conforme a variável `soma` da macro: cada rodada desconta 1 crédito e, se as três roletas forem iguais, acrescenta o prêmio correspondente (5, 10, 15, 25 ou 50 créditos).
+As roletas contêm as paradas inteiras de 0 a 4. A coluna `Lucro` contém o lucro acumulado calculado pela versão anterior da macro, que não avançava o símbolo da linha central. O script preserva os sorteios e recalcula o lucro acumulado com `(parada + 1) % 5` antes de calcular as médias.
 
-A média acumulada é calculada por `Lucro / número de rodadas`. O script não usa a coluna `Lucro médio`, pois os percentuais exportados estão arredondados.
+A média acumulada é calculada pelo lucro acumulado corrigido dividido pelo número de rodadas. A coluna `Lucro médio` também não é usada, pois os percentuais exportados estão arredondados.
 
-Execute pela opção **3** do menu ou diretamente:
+Execute pela opção **2** do menu ou diretamente:
 
 ```powershell
 .\.venv\Scripts\python.exe experimentos/experimento-2.py
@@ -170,9 +170,9 @@ Para testar a reprodução no aplicativo original, execute novamente a macro `Ex
 
 ## Experimento 3
 
-O script inicia `random.Random(42)` uma única vez e mantém a sequência de sorteios entre os 100 participantes. Cada um começa com 100 créditos e aposta 1 por rodada. A sessão termina após 500 rodadas ou quando o saldo fica abaixo de 1. O saldo é atualizado pelo lucro de cada rodada, sem empréstimos ou reposição. Este experimento não precisa de planilha de entrada.
+O script inicia `random.Random(42)` uma única vez e mantém a sequência de sorteios entre os 100 participantes. Cada um começa com 100 créditos e aposta 1 por rodada. A sessão termina após 500 rodadas ou quando o saldo fica abaixo de 1. O saldo é atualizado pelo lucro de cada rodada, usando o símbolo central `(parada + 1) % 5`, sem empréstimos ou reposição. Este experimento não precisa de planilha de entrada.
 
-Execute pela opção **4** do menu ou diretamente:
+Execute pela opção **3** do menu ou diretamente:
 
 ```powershell
 .\.venv\Scripts\python.exe experimentos/experimento-3.py

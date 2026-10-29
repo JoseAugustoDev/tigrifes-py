@@ -19,7 +19,8 @@ if not rolos.isin(list(PREMIOS)).all().all():
     raise ValueError("Os rolos devem conter valores inteiros de 0 a 4.")
 
 venceu = rolos["Rolo1"].eq(rolos["Rolo2"]) & rolos["Rolo2"].eq(rolos["Rolo3"])
-premio = rolos["Rolo1"].map(PREMIOS).where(venceu, 0)
+# A macro registra a parada; a linha central mostra o símbolo seguinte.
+premio = ((rolos["Rolo1"] + 1) % 5).map(PREMIOS).where(venceu, 0)
 lucro = premio - 1  # Aposta fixa de um crédito por rodada.
 
 contagens = lucro.value_counts()

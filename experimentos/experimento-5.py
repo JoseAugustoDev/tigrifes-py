@@ -62,8 +62,8 @@ resultados = []
 
 for nome, tabela in [("Base", tabela_base), ("Prêmios +10%", tabela_10)]:
 
-    # Venceu define se há prêmio; Rolo1 identifica seu valor na tabela.
-    pagamentos = df["Rolo1"].map(tabela).where(ganhou, 0.0)
+    # Venceu define se há prêmio; Rolo1 é a parada, anterior ao símbolo central.
+    pagamentos = ((df["Rolo1"] + 1) % 5).map(tabela).where(ganhou, 0.0)
 
     # Guardar pagamentos na planilha
     df[f"pagamento_{nome}"] = pagamentos

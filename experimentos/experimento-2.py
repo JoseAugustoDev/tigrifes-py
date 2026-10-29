@@ -8,16 +8,22 @@ import pandas as pd
 PASTA = Path(__file__).resolve().parent.parent
 SEMENTES = (10, 2026, 123456)
 MARCOS = (100, 1000, 10000)
+PREMIOS = {0: 5, 1: 10, 2: 15, 3: 25, 4: 50}
 
-# Na planilha, Lucro já é o lucro acumulado. Dividir pelo número de
-# rodadas evita usar a coluna Lucro médio, que está arredondada.
+# A coluna Lucro foi calculada pela macro com os prêmios antes da correção.
+# Recalcular pelas paradas preserva os sorteios e corrige o símbolo central.
 medias = {}
 for semente in SEMENTES:
     arquivo = PASTA / "planilhas" / f"exp-2-seed-{semente}.xlsx"
     dados = pd.read_excel(arquivo)
     if len(dados) != 10000:
         raise ValueError(f"{arquivo.name} deve conter 10.000 rodadas.")
-    lucro = pd.to_numeric(dados["Lucro"], errors="raise")
+    rolos = dados[["Roleta 1", "Roleta 2", "Roleta 3"]].apply(pd.to_numeric, errors="raise")
+    if not rolos.isin(list(PREMIOS)).all().all():
+        raise ValueError(f"{arquivo.name}: as roletas devem conter valores de 0 a 4.")
+    venceu = rolos["Roleta 1"].eq(rolos["Roleta 2"]) & rolos["Roleta 2"].eq(rolos["Roleta 3"])
+    premio = ((rolos["Roleta 1"] + 1) % 5).map(PREMIOS).where(venceu, 0)
+    lucro = (premio - 1).cumsum()
     medias[semente] = lucro / pd.Series(range(1, 10001))
 
 tabela = pd.DataFrame(

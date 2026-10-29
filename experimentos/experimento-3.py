@@ -25,7 +25,7 @@ for participante in range(1, PARTICIPANTES + 1):
 
     while rodadas < MAX_RODADAS and saldo >= 1:
         rolos = [gerador.randrange(5) for _ in range(3)]
-        premio = PREMIOS[rolos[0]] if rolos[0] == rolos[1] == rolos[2] else 0
+        premio = PREMIOS[(rolos[0] + 1) % 5] if rolos[0] == rolos[1] == rolos[2] else 0
         saldo += premio - 1
         rodadas += 1
         trajetoria.append(saldo)
